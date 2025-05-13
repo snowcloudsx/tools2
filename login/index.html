@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Dashboard</title>
+    <style>
+        /* Dashboard Specific Styles */
+        body{
+          
+        }
+        .dashboard-container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .user-card {
+            background: var(--input-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+
+        .nav-menu {
+            background: var(--input-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid rgba(46, 43, 65, 0.1);
+        }
+
+        .nav-item:last-child {
+            border-bottom: none;
+        }
+
+        .nav-item:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-item.active {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .greeting {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .date-display {
+            color: rgba(46, 43, 65, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(46, 43, 65, 0.7);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        /* Todo List */
+        .todo-container {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .todo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .todo-input {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .todo-input input {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--input-color);
+            border-radius: 10px;
+            font: inherit;
+        }
+
+        .todo-input button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .todo-input button:hover {
+            background: var(--text-color);
+        }
+
+        .todo-list {
+            list-style: none;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--input-color);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .todo-item:hover {
+            transform: translateX(5px);
+        }
+
+        .todo-item.completed {
+            opacity: 0.7;
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+        }
+
+        .todo-checkbox {
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .todo-text {
+            flex-grow: 1;
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .todo-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgba(46, 43, 65, 0.5);
+            transition: color 0.2s;
+        }
+
+        .todo-actions button:hover {
+            color: var(--accent-color);
+        }
+
+        /* Recent Activity */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(46, 43, 65, 0.1);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--input-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+        }
+
+        .activity-details {
+            flex-grow: 1;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: rgba(46, 43, 65, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="user-card">
+                    <div class="user-avatar" id="user-avatar">JD</div>
+                    <h2 id="username-display">John Doe</h2>
+                    <p id="email-display">john@example.com</p>
+                    <button id="logout-btn" style="margin-top: 1rem; background: #f06272; color: white; border: none; border-radius: 20px; padding: 0.5rem 1rem; cursor: pointer;">Logout</button>
+                </div>
+
+                <div class="nav-menu">
+                    <div class="nav-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-tasks"></i>
+                        <span>Tasks</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>Calendar</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div>
+                    <h1 class="greeting" id="greeting">Good Morning, John</h1>
+                    <p class="date-display" id="date-display">Monday, June 5, 2023</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Tasks Completed</h3>
+                        <p class="value" id="completed-tasks">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Pending Tasks</h3>
+                        <p class="value" id="pending-tasks">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Productivity</h3>
+                        <p class="value" id="productivity">0%</p>
+                    </div>
+                </div>
+
+                <div class="todo-container">
+                    <div class="todo-header">
+                        <h2>My Tasks</h2>
+                        <span id="task-count">0 tasks</span>
+                    </div>
+
+                    <div class="todo-input">
+                        <input type="text" id="new-task-input" placeholder="Add a new task...">
+                        <button id="add-task-btn"><i class="fas fa-plus"></i></button>
+                    </div>
+
+                    <ul class="todo-list" id="todo-list">
+                        <!-- Tasks will be added here dynamically -->
+                    </ul>
+                </div>
+
+                <div class="todo-container">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="activity-details">
+                            <p>Completed task "Design homepage"</p>
+                            <p class="activity-time">10 minutes ago</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="activity-details">
+                            <p>Added new task "Fix login page"</p>
+                            <p class="activity-time">1 hour ago</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // User Data
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            if (!userData) window.location.href = 'login.html';
+            
+            // Set user info
+            document.getElementById('username-display').textContent = userData.username;
+            document.getElementById('email-display').textContent = userData.email;
+            const initials = userData.username.split(' ').map(name => name[0]).join('').toUpperCase();
+            document.getElementById('user-avatar').textContent = initials;
+            
+            // Set greeting based on time of day
+            const hour = new Date().getHours();
+            const greeting = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
+            document.getElementById('greeting').textContent = `${greeting}, ${userData.username.split(' ')[0]}`;
+            
+            // Set current date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date-display').textContent = new Date().toLocaleDateString('en-US', options);
+            
+            // Logout functionality
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('userData');
+                localStorage.removeItem('todoItems');
+                window.location.href = 'login.html';
+            });
+            
+            // Todo List Functionality
+            const todoList = document.getElementById('todo-list');
+            const newTaskInput = document.getElementById('new-task-input');
+            const addTaskBtn = document.getElementById('add-task-btn');
+            const taskCount = document.getElementById('task-count');
+            const completedTasksEl = document.getElementById('completed-tasks');
+            const pendingTasksEl = document.getElementById('pending-tasks');
+            const productivityEl = document.getElementById('productivity');
+            
+            // Load saved todos
+            let todoItems = JSON.parse(localStorage.getItem('todoItems')) || [];
+            
+            // Render todos
+            function renderTodos() {
+                todoList.innerHTML = '';
+                let completedCount = 0;
+                
+                todoItems.forEach((item, index) => {
+                    if (item.completed) completedCount++;
+                    
+                    const li = document.createElement('li');
+                    li.className = `todo-item ${item.completed ? 'completed' : ''}`;
+                    li.innerHTML = `
+                        <input type="checkbox" class="todo-checkbox" ${item.completed ? 'checked' : ''} data-id="${index}">
+                        <span class="todo-text">${item.text}</span>
+                        <div class="todo-actions">
+                            <button class="edit-btn" data-id="${index}"><i class="fas fa-edit"></i></button>
+                            <button class="delete-btn" data-id="${index}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    todoList.appendChild(li);
+                });
+                
+                // Update counters
+                const totalTasks = todoItems.length;
+                const pendingCount = totalTasks - completedCount;
+                const productivity = totalTasks > 0 ? Math.round((completedCount / totalTasks) * 100) : 0;
+                
+                taskCount.textContent = `${totalTasks} ${totalTasks === 1 ? 'task' : 'tasks'}`;
+                completedTasksEl.textContent = completedCount;
+                pendingTasksEl.textContent = pendingCount;
+                productivityEl.textContent = `${productivity}%`;
+                
+                // Save to localStorage
+                localStorage.setItem('todoItems', JSON.stringify(todoItems));
+                
+                // Add event listeners to new elements
+                addTodoEventListeners();
+            }
+            
+            // Add event listeners to todo items
+            function addTodoEventListeners() {
+                document.querySelectorAll('.todo-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        const id = parseInt(this.dataset.id);
+                        todoItems[id].completed = this.checked;
+                        renderTodos();
+                    });
+                });
+                
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        const newText = prompt('Edit task:', todoItems[id].text);
+                        if (newText && newText.trim() !== '') {
+                            todoItems[id].text = newText.trim();
+                            renderTodos();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        if (confirm('Are you sure you want to delete this task?')) {
+                            todoItems.splice(id, 1);
+                            renderTodos();
+                        }
+                    });
+                });
+            }
+            
+            // Add new task
+            function addNewTask() {
+                const text = newTaskInput.value.trim();
+                if (text !== '') {
+                    todoItems.push({
+                        text: text,
+                        completed: false,
+                        createdAt: new Date().toISOString()
+                    });
+                    newTaskInput.value = '';
+                    renderTodos();
+                }
+            }
+            
+            addTaskBtn.addEventListener('click', addNewTask);
+            newTaskInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addNewTask();
+            });
+            
+            // Initial render
+            renderTodos();
+        });
+    </script>
+</body>
+</html>
